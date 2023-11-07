@@ -7,11 +7,24 @@ import { sortTimeSeries, timeSeriesFromKey, isInState, isInCounty } from './lib/
 import { graphAllSeries } from './lib/graph.mjs'
 import { getData, getDataPath } from './lib/network.mjs'
 
+import cliProgress from 'cli-progress'
+
 (async () => {
   const args = await yargs(process.argv.slice(2)).parse()
   getData()
 
-  const records = await processFile(getDataPath(), [isInState(args.state), isInCounty(args.county)])
+  const progress = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+  let count = 0
+  const goalCb = (goal) => {
+    progress.start(goal, count)
+  }
+  const incrementalCb = () => {
+    progress.update(++count)
+  }
+
+  const records = await processFile(getDataPath(), [isInState(args.state), isInCounty(args.county)], goalCb, incrementalCb)
+
+  progress.stop()
 
   const series = sortTimeSeries(timeSeriesFromKey(records, 'id'));
 
