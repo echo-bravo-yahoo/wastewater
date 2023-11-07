@@ -5,10 +5,13 @@ import yargs from 'yargs'
 import { processFile } from './lib/csv.mjs'
 import { sortTimeSeries, timeSeriesFromKey, isInState, isInCounty } from './lib/dataManipulation.mjs'
 import { graphAllSeries } from './lib/graph.mjs'
+import { getData, getDataPath } from './lib/network.mjs'
 
 (async () => {
   const args = await yargs(process.argv.slice(2)).parse()
-  const records = await processFile('NWSS_Public_SARS-CoV-2_Wastewater_Metric_Data_20231105', [isInState(args.state), isInCounty(args.county)])
+  getData()
+
+  const records = await processFile(getDataPath(), [isInState(args.state), isInCounty(args.county)])
 
   const series = sortTimeSeries(timeSeriesFromKey(records, 'id'));
 
