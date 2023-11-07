@@ -3,12 +3,13 @@
 import fs from 'node:fs'
 import { parse } from 'csv-parse'
 import sparkly from 'sparkly'
+import yargs from 'yargs'
 
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-async function processFile(fileName, filter) {
+async function processFile(fileName, filters = []) {
   const records = []
   const parser = fs
     .createReadStream(`${__dirname}/${fileName}.csv`)
@@ -100,7 +101,7 @@ async function processFile(fileName, filter) {
        * Description: The county and county-equivalent names corresponding to *
        * the FIPS codes in 'county_fips'.                                     *
        *                                                                      *
-       * Sample data: "King,Pierce"                                           *
+       * Sample data: "King,Pierce" => ["King", "Pierce"]                     *
        ************************************************************************/
       'counties',
 
@@ -216,10 +217,17 @@ async function processFile(fileName, filter) {
     ]}))
 
   for await (const record of parser) {
-    if (filter) {
-      if (filter(record)) {
-        records.push(record)
+    record.counties = record.counties.split(',')
+
+    if (filters.length) {
+      let passed = true
+      for (const filter of filters) {
+        if (!filter(record)) {
+          passed = false
+          break;
+        }
       }
+      if (passed) records.push(record)
     } else {
       records.push(record)
     }
@@ -229,7 +237,14 @@ async function processFile(fileName, filter) {
 }
 
 function isInState(state) {
-  return (record) => record.state === state
+  return state ? (record) => record.state.toLowerCase() === state.toLowerCase() : () => true
+}
+
+function isInCounty(county) {
+  function _isInCounty(record) {
+    return record.counties.map((data) => data.toLowerCase()).includes(county.toLowerCase())
+  }
+  return county ? _isInCounty : () => true
 }
 
 function timeSeriesFromKey(data, key) {
@@ -249,9 +264,13 @@ function timeSeriesFromKey(data, key) {
 function sortTimeSeries(data) {
   for (let i = 0; i < Object.keys(data); i++) {
     const key = Object.keys(data)[i]
-    data[key].sort((a, b) => {
-      return Number(new Date(a.dateStart)) - Number(new Date(b.dateStart))
-    })
+    if (!data[key]) {
+      delete data[key] // this time series was filtered out by arg filters, so let's delete the key
+    } else {
+      data[key].sort((a, b) => {
+        return Number(new Date(a.dateStart)) - Number(new Date(b.dateStart))
+      })
+    }
   }
 
   return data // just to make chaining/composition easier, since this fn mutates in place
@@ -262,16 +281,10 @@ function seriesToGraphable(series, globalFirstDate) {
   let msPerDay = 86400000
   let daysWithoutData = (Number(localFirstDate) - Number(globalFirstDate)) / msPerDay
   let totalDays = (Number(new Date(series[series.length - 1].dateStart)) - Number(globalFirstDate)) / msPerDay
-  // console.log(`localFirstDate: ${localFirstDate}, daysWithoutData: ${daysWithoutData}, totalDays: ${totalDays}`)
   let res = Array(daysWithoutData).fill(0, 0, daysWithoutData)
 
   for (let i = 0; i < totalDays - daysWithoutData - 1; i++) {
-    try {
     res[i + daysWithoutData] = Number(series[i].percentile)
-    } catch (e) {
-      console.log(`i: ${i}, series.length: ${series.length}, totalDays: ${totalDays}, daysWithoutData: ${daysWithoutData}, max <: ${totalDays - daysWithoutData}`)
-      throw e
-    }
   }
 
   return res
@@ -287,7 +300,7 @@ function headerFromSeries(series) {
 }
 
 function formatCounties(counties) {
-  let countyNames = counties.split(',')
+  let countyNames = counties.length ? counties : counties.split(',')
   let res = ''
 
   if (countyNames.length > 1) {
@@ -305,8 +318,10 @@ function formatCounties(counties) {
   return  res
 }
 
+
 (async () => {
-  const records = await processFile('NWSS_Public_SARS-CoV-2_Wastewater_Metric_Data_20231105', isInState('Washington'))
+  const args = await yargs(process.argv.slice(2)).parse()
+  const records = await processFile('NWSS_Public_SARS-CoV-2_Wastewater_Metric_Data_20231105', [isInState(args.state), isInCounty(args.county)])
 
   const series = sortTimeSeries(timeSeriesFromKey(records, 'id'));
 
@@ -318,7 +333,7 @@ function formatCounties(counties) {
     }
   }, new Date())
 
-  console.log('global first date: ', firstDate)
+  // console.log('global first date: ', firstDate)
   for (let i = 0; i < Object.keys(series).length; i++) {
     console.log(headerFromSeries(series[Object.keys(series)[i]]))
     console.log(sparkly(seriesToGraphable(series[Object.keys(series)[i]], firstDate)) + '\n')
