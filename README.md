@@ -3,7 +3,6 @@
 - Support filtering for specific treatment centers
 - Support alternative bucketing/aggregating schemes
 - Estimate duration for fetching new data
-- Allow global installation under a good namespace
 - Alternate export formats
   - CSV
   - JSON
