@@ -6,28 +6,29 @@ import { processFile } from './lib/csv.mjs'
 import { sortTimeSeries, timeSeriesFromKey, isInState, isInCounty } from './lib/dataManipulation.mjs'
 import { graphAllSeries } from './lib/graph.mjs'
 import { getData, getDataPath } from './lib/network.mjs'
+import history from './lib/commands/history.mjs'
 
 import cliProgress from 'cli-progress'
 
 (async () => {
-  const args = await yargs(process.argv.slice(2)).parse()
-  getData()
+  const args = /*await*/ yargs(process.argv.slice(2))
+    .command(['history', '*'], 'examine COVID wastewater history', {
+      state: {
+        describe: 'which US state(s) to pull data for'
+      },
+      county: {
+        alias: 'counties',
+        describe: 'which US counties to pull data for'
+      },
+      output: {
+        describe: 'what format to output',
+        default: 'sparkchart',
+        // TODO: Support JSON, CSV output
+        choices: ['sparkchart']
+      }
+    },
+    history)
+    .parse()
 
-  const progress = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-  let count = 0
-  const goalCb = (goal) => {
-    progress.start(goal, count)
-  }
-  const incrementalCb = () => {
-    progress.update(++count)
-  }
 
-  const records = await processFile(getDataPath(), [isInState(args.state), isInCounty(args.county)], goalCb, incrementalCb)
-
-  progress.stop()
-
-  const series = sortTimeSeries(timeSeriesFromKey(records, 'id'));
-
-  // console.log('global first date: ', firstDate)
-  graphAllSeries(series)
 })()
