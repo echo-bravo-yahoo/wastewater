@@ -15,11 +15,20 @@ yargs(process.argv.slice(2))
       alias: 'counties',
       describe: 'which US counties to pull data for'
     },
+    ids: {
+      describe: 'the wastewater treatment center IDs to pull data for',
+      type: 'array'
+    },
+    refresh: {
+      describe: 'fetch new data, even if there\'s already cached data from earlier today',
+      default: false,
+      type: 'boolean'
+    },
     output: {
       describe: 'what format to output',
       default: 'sparkchart',
       // TODO: Support JSON, CSV output
-      choices: ['sparkchart']
+      choices: ['sparkchart', 'json', 'csv']
     }
   },
   history

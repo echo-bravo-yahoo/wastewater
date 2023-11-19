@@ -14,6 +14,7 @@
   "dependencies": {
     "cli-progress": "^3.12.0",
     "csv-parse": "^5.5.2",
+    "csv-stringify": "^6.4.4",
     "sparkly": "^6.0.0",
     "yargs": "^17.7.2"
   }
