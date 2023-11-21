@@ -66,6 +66,8 @@ This example uses one plant ID. Note that it does not output any of the progress
 
 
 ## To do
+- Handle gaps in sparkline better (see plant ID 671)
+- Document what the sparkline actually shows
 - Clean up (likely broken) CSV file when process is terminated unexpectedly
 - Add performance measurements
 - Support alternative bucketing/aggregating schemes
