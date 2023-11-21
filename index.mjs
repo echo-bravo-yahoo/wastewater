@@ -11,11 +11,12 @@ yargs(process.argv.slice(2))
     state: {
       describe: 'which US state(s) to pull data for'
     },
-    county: {
-      alias: 'counties',
+    counties: {
+      alias: 'county',
       describe: 'which US counties to pull data for'
     },
     ids: {
+      alias: 'id',
       describe: 'the wastewater treatment center IDs to pull data for',
       type: 'array'
     },
@@ -30,9 +31,9 @@ yargs(process.argv.slice(2))
       type: 'boolean'
     },
     output: {
+      alias: 'format',
       describe: 'what format to output',
       default: 'sparkchart',
-      // TODO: Support JSON, CSV output
       choices: ['sparkchart', 'json', 'csv']
     }
   },
