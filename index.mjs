@@ -19,6 +19,11 @@ yargs(process.argv.slice(2))
       describe: 'the wastewater treatment center IDs to pull data for',
       type: 'array'
     },
+    quiet: {
+      describe: 'suppress progress bars and text. intended for programmatic / scripted use.',
+      default: false,
+      type: 'boolean'
+    },
     refresh: {
       describe: 'fetch new data, even if there\'s already cached data from earlier today',
       default: false,

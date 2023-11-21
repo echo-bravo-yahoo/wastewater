@@ -1,4 +1,5 @@
 ### To do
+- Clean up (likely broken) CSV file when process is terminated unexpectedl
 - Add performance measurements
 - Support alternative bucketing/aggregating schemes
 - Estimate duration for fetching new data
