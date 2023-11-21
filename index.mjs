@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+// interactive COVID wastewater site: https://covid.cdc.gov/covid-data-tracker/#wastewater-surveillance
 // data and column descriptions from: https://data.cdc.gov/Public-Health-Surveillance/NWSS-Public-SARS-CoV-2-Wastewater-Metric-Data/2ew6-ywp6
 
 import yargs from 'yargs'
