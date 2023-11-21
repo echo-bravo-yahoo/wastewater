@@ -75,5 +75,4 @@ This example uses one plant ID. Note that it does not output any of the progress
 - Support API keys and server-side filtering
 - Include context (start, end dates) in sparkchart output
 - Support requesting date ranges
-- Support filtering out inactive sites
 - Support enumerating sites in a city/county/id set

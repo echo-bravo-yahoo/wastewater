@@ -50,6 +50,11 @@ yargs(process.argv.slice(2))
       default: false,
       type: 'boolean'
     },
+    omitInactive: {
+      describe: 'filter out plants that have not reported data in the last week',
+      default: false,
+      type: 'boolean'
+    },
     output: {
       alias: 'format',
       describe: 'what format to output',
