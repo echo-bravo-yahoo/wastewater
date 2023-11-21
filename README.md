@@ -9,7 +9,7 @@ If you've worked with me before, you may be aware of my love for [sparkline](htt
 Install nodeJS, either [directly from their website](https://nodejs.org/en) or through [nvm (node version manager)](https://github.com/nvm-sh/nvm#intro).
 
 ## Installation
-Install wastewater globally using npm (`npm install wastewater --global`).
+Install wastewater globally using npm (`npm install wastewater-cli --global`).
 
 ## Example Usage
 Note that ellipses (`...`) are used for brevity, and represent ommitted data similar to that above and below it. Also note that many of the options for the tool have aliases, both for singular and plural usage (`id` and `ids` or `county` and `counties`) as well as common synonyms (`output` and `format`)
