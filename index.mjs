@@ -3,11 +3,30 @@
 // interactive COVID wastewater site: https://covid.cdc.gov/covid-data-tracker/#wastewater-surveillance
 // data and column descriptions from: https://data.cdc.gov/Public-Health-Surveillance/NWSS-Public-SARS-CoV-2-Wastewater-Metric-Data/2ew6-ywp6
 
+import * as fs from 'fs'
+
 import yargs from 'yargs'
+import updateNotifier from 'update-notifier'
 
 import history from './lib/commands/history.mjs'
 
+
 yargs(process.argv.slice(2))
+  .check((argv) => {
+    const packageJson = JSON.parse(fs.readFileSync('./package.json'))
+    // always check for updates before starting actual work
+    const notifier = updateNotifier({
+      // pkg: packageJson,
+      // updateCheckInterval: 1000 * 60 * 60 * 24 * 7 // 1 week
+      pkg: { name: 'public-ip', version: '0.9.2' },
+      updateCheckInterval: 0
+    })
+
+    // only notify the user if running in noisy mode
+    if (!argv.quiet) notifier.notify()
+
+    return true
+  })
   .command(['history', '*'], 'examine COVID wastewater history', {
     state: {
       describe: 'which US state(s) to pull data for'
@@ -22,7 +41,7 @@ yargs(process.argv.slice(2))
       type: 'array'
     },
     quiet: {
-      describe: 'suppress progress bars and text. intended for programmatic / scripted use.',
+      describe: 'suppress progress bars, progress text, and update notifications. intended for programmatic / scripted use.',
       default: false,
       type: 'boolean'
     },
