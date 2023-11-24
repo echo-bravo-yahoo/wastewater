@@ -66,13 +66,20 @@ This example uses one plant ID. Note that it does not output any of the progress
 
 
 ## To do
-- Handle gaps in sparkline better (see plant ID 671)
+### High
+- Data handling
+  - Many plants have gaps in reporting; show that better (see plant ID 676)
+  - Many plants report 999 instead of real data; show that better (see plant ID 676)
+- Support requesting date ranges
 - Document what the sparkline actually shows
+
+### Medium
+- Support alternative bucketing/aggregating schemes
+- Include context (start, end dates, most recent value) in sparkchart output
+
+### Low
 - Clean up (likely broken) CSV file when process is terminated unexpectedly
 - Add performance measurements
-- Support alternative bucketing/aggregating schemes
 - Estimate duration for fetching new data
 - Support API keys and server-side filtering
-- Include context (start, end dates) in sparkchart output
-- Support requesting date ranges
 - Support enumerating sites in a city/county/id set
