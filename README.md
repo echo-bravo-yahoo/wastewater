@@ -12,10 +12,10 @@ Install nodeJS, either [directly from their website](https://nodejs.org/en) or t
 Install wastewater globally using npm (`npm install wastewater-cli --global`).
 
 ## Example Usage
-Note that ellipses (`...`) are used for brevity, and represent ommitted data similar to that above and below it. Also note that many of the options for the tool have aliases, both for singular and plural usage (`id` and `ids` or `county` and `counties`) as well as common synonyms (`output` and `format`)
+Note that ellipses (`...`) are used for brevity, and represent ommitted data similar to that above and below it. Also note that many of the options for the tool have aliases, both for singular and plural usage (`id` and `ids` or `county` and `counties`) as well as common synonyms (`output` and `format`). The examples build on each other; I recommend reading them through from start to finish.
 
 ### Graph the wastewater trends for all plants in Florida's Orange county
-Notice that, since there's an Orange county in multiple states, this command filters both by state (`--state`) and county (`--county`).
+Notice that, since there's an Orange county in multiple states, this command filters both by state (`--state`) and county (`--county`). The default view is a sparkline of the amount of COVID detected in wastewater by day, as a percentage of the worst recording at that site. For instance, if the worst recorded day was a week ago, and today is half as bad, the value for a week ago would be 100, and today would be 50.
 ```bash
 > wastewater history --county Orange --state Florida
 Existing data found. Using it.
@@ -28,10 +28,13 @@ Treatment plant in Florida (#1735) serving 51,000 people in Orange and Seminole 
 
 ```
 
-### Output a CSV description of the wastewater trends for specific plants
-This example uses two specific treatment plant IDs instead of a county or state. Note that it does not output any of the progress bars or text (because of the `--quiet` flag) and re-downloads the dataset, even if it's available on disk (because of the `--refresh` flag).
+### Output a CSV description of the wastewater trends for several specific plants
+You can also use a specific plant ID or IDs instead of a state and/or county, and you can output CSV instead of sparklines (`--format`). Note that this example also re-downloads the dataset, even if it's available on disk (because of the `--refresh` flag); this can be helpful if you have an incomplete CSV file, or want to make sure that you have the latest data saved locally. Local data should be at worst one day old.
 ```bash
-> wastewater history --ids 2420 676 --format csv --quiet --refresh
+> wastewater history --ids 2420 676 --format csv --refresh
+Existing data found, but refresh argument provided. Downloading fresh copy now.
+Done downloading new data.
+ ████████████████████████████████████████ 100% | ETA: 0s | 745063/745063
 id,state,counties,location,population,dateStart,dateEnd,changeOver15Days,percentile,firstSampleDate
 676,Washington,"King,Snohomish",Treatment plant,288000,2023-09-06,2023-09-20,,58.0,2023-09-20
 2420,Washington,"King,Snohomish",Treatment plant,789000,2023-09-05,2023-09-19,,7.0,2023-09-19
@@ -64,6 +67,13 @@ This example uses one plant ID. Note that it does not output any of the progress
 }
 ```
 
+### Parsing the CSV description of the wastewater trends for a specific plant using cut
+JSON and CSV output (when in `--quiet` mode) are easy to embed in bash scripts and other automated workflows. This example pulls the most recent reading's percentile value for a given plant.
+```bash
+> wastewater history --id 2420 --quiet --format csv | tail -n 2 | head -n 1 | cut -d ',' -f 10
+66.0
+```
+
 
 ## To do
 ### High
@@ -71,7 +81,6 @@ This example uses one plant ID. Note that it does not output any of the progress
   - Many plants have gaps in reporting; show that better (see plant ID 676)
   - Many plants report 999 instead of real data; show that better (see plant ID 676)
 - Support requesting date ranges
-- Document what the sparkline actually shows
 
 ### Medium
 - Support alternative bucketing/aggregating schemes
