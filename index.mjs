@@ -16,10 +16,8 @@ yargs(process.argv.slice(2))
     const packageJson = JSON.parse(fs.readFileSync('./package.json'))
     // always check for updates before starting actual work
     const notifier = updateNotifier({
-      // pkg: packageJson,
-      // updateCheckInterval: 1000 * 60 * 60 * 24 * 7 // 1 week
-      pkg: { name: 'public-ip', version: '0.9.2' },
-      updateCheckInterval: 0
+      pkg: packageJson,
+      updateCheckInterval: 1000 * 60 * 60 * 24 * 7 // 1 week
     })
 
     // only notify the user if running in noisy mode
