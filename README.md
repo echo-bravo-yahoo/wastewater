@@ -80,14 +80,15 @@ JSON and CSV output (when in `--quiet` mode) are easy to embed in bash scripts a
 - Data handling
   - Show missing data as ' ' instead of '_'
 - Support requesting date ranges
+- Fix parsing ETA display (always shows 0 seconds)
 
 ### Medium
 - Support alternative bucketing/aggregating schemes
 - Include context (start, end dates, most recent value) in sparkchart output
+- Estimate duration for fetching new data
 
 ### Low
 - Clean up (likely broken) CSV file when process is terminated unexpectedly
 - Add performance measurements
-- Estimate duration for fetching new data
 - Support API keys and server-side filtering
 - Support enumerating sites in a city/county/id set
