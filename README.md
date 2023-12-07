@@ -78,8 +78,7 @@ JSON and CSV output (when in `--quiet` mode) are easy to embed in bash scripts a
 ## To do
 ### High
 - Data handling
-  - Many plants have gaps in reporting; show that better (see plant ID 676)
-  - Many plants report 999 instead of real data; show that better (see plant ID 676)
+  - Show missing data as ' ' instead of '_'
 - Support requesting date ranges
 
 ### Medium
