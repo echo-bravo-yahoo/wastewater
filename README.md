@@ -85,6 +85,7 @@ JSON and CSV output (when in `--quiet` mode) are easy to embed in bash scripts a
 ### Medium
 - Support alternative bucketing/aggregating schemes
 - Include context (start, end dates, most recent value) in sparkchart output
+- Fix some output modes (definitely CSV) from ending with a blank line; this messes up using `tail` on the output
 
 ### Low
 - Clean up (likely broken) CSV file when process is terminated unexpectedly
