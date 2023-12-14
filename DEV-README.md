@@ -3,6 +3,7 @@
 - Data handling
   - Show missing data as ' ' instead of '_'
 - Support requesting date ranges
+- OmitInactive does not appear to be working; see this query `wastewater history --county King --omitInactive`
 
 ### Medium
 - Support alternative bucketing/aggregating schemes
