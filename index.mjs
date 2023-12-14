@@ -57,7 +57,7 @@ yargs(process.argv.slice(2))
       alias: 'format',
       describe: 'what format to output',
       default: 'sparkchart',
-      choices: ['sparkchart', 'json', 'csv', 'array']
+      choices: ['sparkchart', 'json', 'csv', 'array', 'none']
     }
   },
   history
