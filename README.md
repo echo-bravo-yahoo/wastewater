@@ -73,22 +73,3 @@ JSON and CSV output (when in `--quiet` mode) are easy to embed in bash scripts a
 > wastewater history --id 2420 --quiet --format csv | tail -n 2 | head -n 1 | cut -d ',' -f 10
 66.0
 ```
-
-
-## To do
-### High
-- Data handling
-  - Show missing data as ' ' instead of '_'
-- Support requesting date ranges
-- Fix parsing ETA display (always shows 0 seconds)
-
-### Medium
-- Support alternative bucketing/aggregating schemes
-- Include context (start, end dates, most recent value) in sparkchart output
-- Estimate duration for fetching new data
-
-### Low
-- Clean up (likely broken) CSV file when process is terminated unexpectedly
-- Add performance measurements
-- Support API keys and server-side filtering
-- Support enumerating sites in a city/county/id set
