@@ -3,13 +3,10 @@
 - Data handling
   - Show missing data as ' ' instead of '_'
 - Support requesting date ranges
-- Fix parsing ETA display (always shows 0 seconds)
-- Support displaying progress bar and ETA for getData calls
 
 ### Medium
 - Support alternative bucketing/aggregating schemes
 - Include context (start, end dates, most recent value) in sparkchart output
-- Estimate duration for fetching new data
 
 ### Low
 - Clean up (likely broken) CSV file when process is terminated unexpectedly
