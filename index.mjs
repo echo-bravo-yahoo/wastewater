@@ -59,6 +59,11 @@ yargs(process.argv.slice(2))
       describe: 'what format to output',
       default: 'sparkchart',
       choices: ['sparkchart', 'json', 'csv', 'array', 'none']
+    },
+    bucketSize: {
+      describe: 'the amount of time that each datapoint in a graph or row in a csv/json represents',
+      default: '1d',
+      choices: ['1d', '1w', '1m']
     }
   },
   history
