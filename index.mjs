@@ -4,17 +4,18 @@
 // data and column descriptions from: https://data.cdc.gov/Public-Health-Surveillance/NWSS-Public-SARS-CoV-2-Wastewater-Metric-Data/2ew6-ywp6
 
 import * as fs from 'fs'
+import { resolve } from 'path'
+const __dirname = import.meta.dirname;
 
 import yargs from 'yargs'
 import updateNotifier from 'update-notifier'
 
 import history from './lib/commands/history.mjs'
 
-
 yargs(process.argv.slice(2))
   .check((argv) => {
-    const packageJson = JSON.parse(fs.readFileSync('./package.json'))
-    // always check for updates before starting actual work
+    const packageJson = JSON.parse(fs.readFileSync(resolve(__dirname, 'package.json')))
+    // check for updates before starting actual work
     const notifier = updateNotifier({
       pkg: packageJson,
       updateCheckInterval: 1000 * 60 * 60 * 24 * 7 // 1 week
